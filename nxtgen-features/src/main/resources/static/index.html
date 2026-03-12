@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NxtGen — Team Communication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   NxtGen Design System
+   Aesthetic: Warm corporate-modern.
+   Deep indigo sidebar, cream message area.
+   Typefaces: Plus Jakarta Sans + DM Mono
+   ═══════════════════════════════════════ */
+:root {
+  /* Sidebar palette */
+  --sb-bg:       #1e1348;
+  --sb-bg2:      #261a58;
+  --sb-border:   rgba(255,255,255,.08);
+  --sb-text:     rgba(255,255,255,.72);
+  --sb-text-dim: rgba(255,255,255,.38);
+  --sb-hover:    rgba(255,255,255,.07);
+  --sb-active:   rgba(255,255,255,.14);
+
+  /* Main area */
+  --main-bg:     #f9f8fe;
+  --main-bg2:    #ffffff;
+  --main-border: #e8e5f4;
+  --text:        #1a1535;
+  --text2:       #6b6490;
+  --text3:       #a89ec7;
+
+  /* Brand */
+  --brand:       #5c35d4;
+  --brand-l:     #7c5ce8;
+  --brand-glow:  rgba(92,53,212,.18);
+  --brand-pale:  #ede9fb;
+
+  /* Semantic */
+  --green:       #10b981;
+  --red:         #ef4444;
+  --amber:       #f59e0b;
+  --online:      #22c55e;
+
+  /* Avatar colours */
+  --av-rose:    #f43f5e; --av-orange: #f97316; --av-amber: #f59e0b;
+  --av-lime:    #84cc16; --av-emerald:#10b981; --av-teal:  #14b8a6;
+  --av-sky:     #0ea5e9; --av-indigo: #6366f1; --av-violet:#8b5cf6;
+  --av-pink:    #ec4899;
+
+  --r:  6px;
+  --r2: 12px;
+  --r3: 18px;
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow2: 0 4px 24px rgba(92,53,212,.12), 0 1px 4px rgba(0,0,0,.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+
+body {
+  font-family: var(--font);
+  background: var(--main-bg);
+  color: var(--text);
+  display: grid;
+  grid-template-columns: 260px 1fr auto;
+  height: 100vh;
+}
+
+/* ══════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════ */
+.sidebar {
+  background: var(--sb-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Subtle gradient shimmer at top */
+.sidebar::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 180px;
+  background: radial-gradient(ellipse at 30% 0%, rgba(124,92,232,.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* LOGO / WORKSPACE HEADER */
+.workspace-header {
+  padding: 0 16px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--sb-border);
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: background .15s;
+}
+.workspace-header:hover { background: var(--sb-hover); }
+
+.logo-mark {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c5ce8 0%, #5c35d4 50%, #3d1fa8 100%);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(92,53,212,.5);
+  position: relative;
+  overflow: hidden;
+}
+.logo-mark::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.25) 0%, transparent 60%);
+}
+.logo-shimmer {
+  position: absolute; top: -100%; left: -100%;
+  width: 300%; height: 300%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,.2) 50%, transparent 60%);
+  animation: shimmer 4s ease infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+  100% { transform: translateX(50%)   translateY(50%)   rotate(0deg); }
+}
+.workspace-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.workspace-plan {
+  font-size: 10px;
+  color: var(--sb-text-dim);
+  font-weight: 500;
+  margin-top: 1px;
+}
+.ws-chevron {
+  margin-left: auto;
+  color: var(--sb-text-dim);
+  font-size: 12px;
+}
+
+/* User presence pill */
+.my-presence {
+  margin: 10px 12px 6px;
+  padding: 8px 10px;
+  border-radius: var(--r2);
+  background: var(--sb-hover);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background .15s;
+  border: 1px solid var(--sb-border);
+}
+.my-presence:hover { background: var(--sb-active); }
+.presence-avatar {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  position: relative;
+}
+.presence-avatar::after {
+  content: '';
+  position: absolute; bottom: -2px; right: -2px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--online);
+  border: 2px solid var(--sb-bg);
+}
+.presence-info { flex: 1; min-width: 0; }
+.presence-name { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.presence-status { font-size: 10px; color: var(--sb-text-dim); }
+.presence-edit { font-size: 11px; color: var(--sb-text-dim); }
+
+/* Sidebar nav sections */
+.sb-section { padding: 0 8px; flex-shrink: 0; }
+.sb-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 8px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--sb-text-dim);
+}
+.sb-add-btn {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  background: none;
+  border: none;
+  color: var(--sb-text-dim);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  line-height: 1;
+  transition: background .15s, color .15s;
+}
+.sb-add-btn:hover { background: var(--sb-hover); color: #fff; }
+
+/* Channel item */
+.ch-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 8px;
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: background .12s;
+  position: relative;
+  margin-bottom: 1px;
+}
+.ch-item:hover { background: var(--sb-hover); }
+.ch-item.active { background: var(--sb-active); }
+.ch-item.active .ch-name { color: #fff; font-weight: 600; }
+.ch-emoji { font-size: 14px; flex-shrink: 0; width: 18px; text-align: center; }
+.ch-name  { font-size: 13px; color: var(--sb-text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ch-badge {
+  min-width: 18px; height: 18px;
+  border-radius: 9px;
+  background: var(--brand-l);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 5px;
+}
+.ch-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--sb-text-dim);
+  flex-shrink: 0;
+}
+.ch-item.active .ch-dot { background: #fff; }
+
+/* Members section */
+.members-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  margin-top: 4px;
+}
+.member-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: background .12s;
+  margin-bottom: 1px;
+}
+.member-item:hover { background: var(--sb-hover); }
+.m-avatar {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 9px; font-weight: 700; color: #fff;
+  flex-shrink: 0; position: relative;
+}
+.m-avatar.online::after {
+  content: ''; position: absolute; bottom: -2px; right: -2px;
+  width: 7px; height: 7px;
+  border-radius: 50%; background: var(--online); border: 1.5px solid var(--sb-bg);
+}
+.m-name { font-size: 12px; color: var(--sb-text); }
+
+/* Sidebar scrollable channels */
+.channels-scroll { overflow-y: auto; flex-shrink: 0; max-height: 280px; padding: 0 8px; }
+
+/* Sidebar footer */
+.sb-footer {
+  padding: 10px 12px;
+  border-top: 1px solid var(--sb-border);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   MAIN AREA
+══════════════════════════════════════════ */
+.main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--main-bg2);
+}
+
+/* Channel topbar */
+.channel-topbar {
+  height: 58px;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--main-border);
+  gap: 12px;
+  flex-shrink: 0;
+  background: var(--main-bg2);
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.topbar-emoji { font-size: 18px; }
+.topbar-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.topbar-desc { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-divider { width: 1px; height: 20px; background: var(--main-border); flex-shrink: 0; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-pill {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--brand-pale);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+}
+.topbar-pill:hover { background: #e0d9f8; }
+.topbar-action {
+  width: 32px; height: 32px;
+  border-radius: var(--r);
+  background: none;
+  border: 1px solid var(--main-border);
+  color: var(--text2);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 15px;
+  transition: all .15s;
+}
+.topbar-action:hover { background: var(--brand-pale); border-color: #c8bff5; color: var(--brand); }
+
+/* Messages */
+.messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--main-bg2);
+}
+
+/* Date separator */
+.date-sep {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.date-sep::before, .date-sep::after {
+  content: ''; flex: 1;
+  height: 1px;
+  background: var(--main-border);
+}
+
+/* Message row */
+.msg-group { margin-bottom: 2px; position: relative; }
+.msg-row {
+  display: flex; gap: 10px;
+  padding: 3px 8px;
+  border-radius: var(--r2);
+  transition: background .1s;
+}
+.msg-row:hover { background: #f4f2fc; }
+.msg-row.first-in-group { padding-top: 10px; }
+.msg-row.mine { flex-direction: row; }
+
+/* Avatar */
+.msg-avatar {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.msg-avatar.placeholder { opacity: 0; }
+
+/* Message body */
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta {
+  display: flex; align-items: baseline; gap: 8px;
+  margin-bottom: 2px;
+}
+.msg-author {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+}
+.msg-author:hover { text-decoration: underline; }
+.msg-ts {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+}
+.msg-ts-hover {
+  display: none;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  background: var(--main-bg2);
+  border: 1px solid var(--main-border);
+  border-radius: var(--r);
+  padding: 2px 6px;
+}
+.msg-row:hover .msg-ts-hover { display: block; }
+.msg-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  word-break: break-word;
+}
+.msg-text a { color: var(--brand); text-decoration: underline; }
+
+/* Inline code */
+.msg-text code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: #ede9fb;
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--brand);
+}
+
+/* System message */
+.msg-system {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--text3);
+  font-style: italic;
+}
+.msg-system-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Reactions bar */
+.reactions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.reaction-pill {
+  display: flex; align-items: center; gap: 3px;
+  background: #ede9fb;
+  border: 1px solid #d4cbf5;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.reaction-pill:hover { background: #ddd5f5; }
+.reaction-count { font-size: 11px; font-weight: 600; color: var(--brand); }
+
+/* Message actions (hover) */
+.msg-actions {
+  display: none;
+  position: absolute;
+  right: 12px;
+  top: -16px;
+  background: var(--main-bg2);
+  border: 1px solid var(--main-border);
+  border-radius: 10px;
+  padding: 3px 4px;
+  gap: 2px;
+  box-shadow: var(--shadow);
+}
+.msg-row:hover .msg-actions { display: flex; }
+.action-btn {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: grid; place-items: center;
+  transition: background .1s;
+  color: var(--text2);
+}
+.action-btn:hover { background: var(--brand-pale); color: var(--brand); }
+
+/* Typing indicator */
+.typing-bar {
+  padding: 4px 20px 6px;
+  font-size: 11px;
+  color: var(--text3);
+  display: flex; align-items: center; gap: 6px;
+  min-height: 24px;
+  flex-shrink: 0;
+}
+.typing-dots { display: flex; gap: 3px; }
+.typing-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--brand);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: .2s; }
+.typing-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+  30%           { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ── COMPOSE BOX ────────────────── */
+.compose-area {
+  padding: 0 16px 16px;
+  flex-shrink: 0;
+}
+.compose-box {
+  background: var(--main-bg2);
+  border: 1.5px solid var(--main-border);
+  border-radius: var(--r2);
+  transition: border-color .2s, box-shadow .2s;
+  overflow: hidden;
+}
+.compose-box:focus-within {
+  border-color: #b5a8f0;
+  box-shadow: 0 0 0 3px rgba(92,53,212,.08);
+}
+
+/* Compose toolbar */
+.compose-toolbar {
+  display: flex; align-items: center;
+  padding: 8px 10px 0;
+  gap: 2px;
+}
+.fmt-btn {
+  width: 28px; height: 28px;
+  border-radius: var(--r);
+  border: none;
+  background: none;
+  color: var(--text2);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background .1s, color .1s;
+  font-family: var(--font);
+}
+.fmt-btn:hover { background: var(--brand-pale); color: var(--brand); }
+.fmt-sep { width: 1px; height: 16px; background: var(--main-border); margin: 0 4px; }
+
+/* Compose input */
+.compose-input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  padding: 10px 14px;
+  resize: none;
+  min-height: 44px;
+  max-height: 200px;
+  line-height: 1.55;
+}
+.compose-input::placeholder { color: var(--text3); }
+
+/* Compose bottom row */
+.compose-bottom {
+  display: flex; align-items: center;
+  padding: 6px 10px;
+  gap: 4px;
+  border-top: 1px solid var(--main-border);
+}
+.compose-left { display: flex; gap: 2px; flex: 1; }
+.send-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, transform .1s, box-shadow .15s;
+}
+.send-btn:hover {
+  background: var(--brand-l);
+  box-shadow: 0 2px 12px rgba(92,53,212,.35);
+  transform: translateY(-1px);
+}
+.send-btn:active { transform: translateY(0); }
+.send-btn.disabled { background: var(--text3); pointer-events: none; }
+
+/* ══════════════════════════════════════════
+   JOIN MODAL (shown before entering name)
+══════════════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10,8,30,.7);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 40px;
+  width: 420px;
+  box-shadow: 0 24px 80px rgba(30,19,72,.25), 0 4px 16px rgba(0,0,0,.1);
+  animation: slideUp .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+.modal-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.modal-logo-mark {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7c5ce8, #3d1fa8);
+  display: grid; place-items: center;
+  font-size: 22px; font-weight: 800; color: #fff;
+  box-shadow: 0 4px 16px rgba(92,53,212,.4);
+}
+.modal-logo-text { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.02em; }
+.modal-logo-text span { color: var(--brand); }
+.modal-h1 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; letter-spacing: -.02em; }
+.modal-sub { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.5; }
+.modal-label { font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
+.modal-input {
+  width: 100%;
+  background: var(--main-bg);
+  border: 1.5px solid var(--main-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  margin-bottom: 16px;
+}
+.modal-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(92,53,212,.1);
+}
+.modal-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #7c5ce8 0%, #5c35d4 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(92,53,212,.3);
+}
+.modal-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(92,53,212,.4); }
+.modal-btn:active { transform: none; }
+
+/* ══════════════════════════════════════════
+   NEW CHANNEL MODAL
+══════════════════════════════════════════ */
+.modal-sm { width: 380px; padding: 28px 32px; }
+
+/* ══════════════════════════════════════════
+   SCROLLBARS
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d0cbec; border-radius: 3px; }
+.sidebar ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
+
+/* ══════════════════════════════════════════
+   EMPTY / WELCOME STATE
+══════════════════════════════════════════ */
+.welcome-state {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--text3);
+  padding: 40px;
+}
+.welcome-emoji { font-size: 48px; }
+.welcome-h { font-size: 18px; font-weight: 700; color: var(--text2); }
+.welcome-p { font-size: 13px; line-height: 1.6; max-width: 320px; }
+
+/* Channel welcome banner */
+.ch-welcome-banner {
+  padding: 20px 8px 16px;
+  border-bottom: 1px solid var(--main-border);
+  margin-bottom: 8px;
+}
+.ch-welcome-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
+.ch-welcome-h { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.ch-welcome-p  { font-size: 13px; color: var(--text2); }
+
+/* Toast */
+.toast-wrap {
+  position: fixed; bottom: 20px; right: 24px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 9000; pointer-events: none;
+}
+.toast {
+  background: var(--text);
+  color: #fff;
+  border-radius: var(--r2);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 320px;
+  animation: toastSlide .3s ease, toastFade .3s ease 3.7s forwards;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  pointer-events: auto;
+}
+.toast.success { background: var(--green); }
+.toast.error   { background: var(--red);   }
+@keyframes toastSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+@keyframes toastFade  { to{opacity:0;transform:translateY(10px)} }
+
+/* Utility */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.gap-2 { gap: 8px; }
+
+
+/* ═══ Feature styles ═══ */
+/* ─── Knowledge Cards (in-chat) ─── */
+.knowledge-card {
+  margin: 6px 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #86efac;
+  border-radius: 12px;
+  font-size: 13px;
+}
+.kc-header { font-weight: 700; color: #16a34a; margin-bottom: 6px; font-size:12px; }
+.kc-problem { color: #374151; margin-bottom: 4px; }
+.kc-solution { color: #1e40af; margin-bottom: 4px; }
+.kc-meta { font-size: 11px; color: #9ca3af; }
+
+/* ─── Knowledge Panel (fixed slide-in) ─── */
+.kp-panel {
+  position: fixed; top: 0; right: -300px; width: 300px; height: 100vh;
+  background: #fff; border-left: 1px solid #e8e5f4;
+  display: flex; flex-direction: column;
+  transition: right .3s cubic-bezier(.4,0,.2,1);
+  z-index: 500;
+  box-shadow: -4px 0 24px rgba(0,0,0,.08);
+}
+.kp-panel.open { right: 0; }
+.kp-header {
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid #e8e5f4;
+  font-weight: 700; font-size: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.kp-close {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: #f3f4f6; cursor: pointer; font-size: 14px; color: #6b7280;
+  display: grid; place-items: center; transition: background .15s;
+}
+.kp-close:hover { background: #e5e7eb; }
+.kp-content { flex: 1; overflow-y: auto; padding: 8px 0; }
+.kp-empty { padding: 32px 16px; text-align: center; color: #9ca3af; font-size: 13px; line-height: 1.6; }
+.kp-item { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; }
+.kp-item:last-child { border-bottom: none; }
+.kp-badge { font-size: 10px; font-weight: 700; color: #6366f1; background: #ede9fb; padding: 1px 7px; border-radius: 99px; display: inline-block; margin-bottom: 6px; }
+.kp-problem { font-size: 12px; color: #374151; font-weight: 600; margin-bottom: 4px; line-height:1.4; }
+.kp-solution { font-size: 11px; color: #2563eb; line-height:1.4; }
+
+/* ─── Priority ─── */
+.priority-btn { padding:3px 10px; border-radius:99px; border:1px solid #e5e7eb; background:#fff; font-size:11px; font-weight:600; cursor:pointer; transition:all .15s; }
+.priority-btn.active { color:#fff; border-color:transparent; }
+#prio-NORMAL.active    { background:#6366f1; }
+#prio-IMPORTANT.active { background:#f59e0b; }
+#prio-CRITICAL.active  { background:#ef4444; }
+.priority-bar { font-size:12px; font-weight:600; padding:4px 12px; min-height:4px; transition:all .3s; }
+.priority-bar.prio-important { background:#fef3c7; color:#92400e; }
+.priority-bar.prio-critical  { background:#fee2e2; color:#991b1b; animation: pulse-bar 1s ease infinite; }
+@keyframes pulse-bar { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+.critical-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:9999; display:grid; place-items:center; }
+.critical-box { background:#fff; border-radius:16px; padding:36px 40px; max-width:480px; text-align:center; border:3px solid #ef4444; box-shadow:0 0 60px rgba(239,68,68,.4); animation:shake .3s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.critical-icon { font-size:48px; margin-bottom:8px; }
+.critical-title { font-size:20px; font-weight:800; color:#ef4444; margin-bottom:4px; }
+.critical-sender { font-size:13px; color:#6b7280; margin-bottom:12px; }
+.critical-content { font-size:16px; color:#111; margin-bottom:20px; }
+.critical-box button { padding:8px 24px; background:#ef4444; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+
+/* ─── Sentiment bar ─── */
+#sentimentBar { display:flex; align-items:center; gap:8px; padding:5px 16px; background:#f9f8fe; border-bottom:1px solid #e8e5f4; font-size:11px; flex-wrap:wrap; min-height:0; }
+#sentimentBar:empty { display:none; }
+.sent-label { color:#6b6490; font-weight:600; }
+.sent-pos { color:#16a34a; }
+.sent-neu { color:#6b7280; }
+.sent-neg { color:#dc2626; }
+.sent-bar-track { flex:1; height:5px; background:#e8e5f4; border-radius:99px; overflow:hidden; display:flex; min-width:80px; }
+.sent-seg { height:100%; transition:width .6s ease; }
+.sent-seg-pos { background:#22c55e; }
+.sent-seg-neu { background:#d1d5db; }
+.sent-seg-neg { background:#ef4444; }
+
+/* ─── Translation ─── */
+.translation-badge { font-size:11px; cursor:help; opacity:.65; }
+.translated-text { font-style:italic; }
+
+/* ─── Time Capsule Modal ─── */
+.tc-overlay {
+  position: fixed; inset: 0; background: rgba(10,8,30,.6);
+  backdrop-filter: blur(4px); z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+}
+.tc-overlay.hidden { display: none; }
+.tc-modal {
+  background: #fff; border-radius: 16px; width: 420px; max-width: 95vw;
+  box-shadow: 0 24px 80px rgba(30,19,72,.25);
+  animation: slideUp .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+.tc-header {
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid #e8e5f4;
+  display: flex; justify-content: space-between; align-items: center;
+  font-weight: 700; font-size: 15px;
+}
+.tc-close { border:none; background:none; font-size:18px; cursor:pointer; color:#9ca3af; padding:2px 6px; border-radius:6px; }
+.tc-close:hover { background:#f3f4f6; }
+.tc-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.tc-field label { display:block; font-size:12px; font-weight:700; color:#6b6490; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+.tc-field textarea { width:100%; padding:10px 12px; border:1.5px solid #e8e5f4; border-radius:8px; font-family:inherit; font-size:13px; resize:vertical; outline:none; }
+.tc-field textarea:focus { border-color:#7c5ce8; }
+.tc-trigger-row { display:flex; gap:16px; margin:8px 0; }
+.tc-trigger-row label { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; color:#374151; cursor:pointer; text-transform:none; letter-spacing:0; }
+.tc-footer { padding: 16px 20px; border-top: 1px solid #e8e5f4; display:flex; justify-content:flex-end; gap:10px; }
+.tc-btn-cancel { padding:8px 18px; border:1.5px solid #e5e7eb; background:#fff; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; color:#6b7280; }
+.tc-btn-cancel:hover { background:#f9fafb; }
+.tc-btn-schedule { padding:8px 20px; background:linear-gradient(135deg,#7c5ce8,#5c35d4); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:13px; font-weight:700; }
+.tc-btn-schedule:hover { opacity:.9; }
+
+/* ─── Attention Route ─── */
+.attention-route {
+  display:flex; align-items:flex-start; gap:10px;
+  margin:4px 16px; padding:10px 14px;
+  background:#fffbeb; border:1px solid #fcd34d; border-radius:10px;
+  font-size:12px;
+}
+.ar-icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+.ar-body { color:#374151; line-height:1.5; }
+.ar-expert { font-weight:700; color:#7c3aed; }
+.ar-kw { margin-left:6px; color:#9ca3af; font-size:11px; background:#f3f4f6; padding:1px 6px; border-radius:4px; }
+
+/* ─── Feature toolbar above compose ─── */
+.compose-features {
+  padding: 6px 16px 4px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  border-top: 1px solid var(--main-border);
+  background: var(--main-bg2);
+}
+.feature-btn {
+  padding:3px 10px; border-radius:99px; border:1px solid #e5e7eb;
+  background:#fff; font-size:11px; font-weight:600; cursor:pointer;
+  color:#6b6490; transition:all .15s; white-space:nowrap;
+}
+.feature-btn:hover { background:#ede9fb; border-color:#c4b5fd; color:#5c35d4; }
+
+/* ─── Language selector ─── */
+.lang-selector { display:flex; align-items:center; gap:5px; font-size:12px; color:#6b6490; }
+.lang-selector select { font-size:12px; border:1px solid #e5e7eb; border-radius:6px; padding:2px 6px; cursor:pointer; outline:none; }
+
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════ JOIN MODAL ══════════════ -->
+<div class="modal-backdrop" id="joinModal">
+  <div class="modal-card">
+    <div class="modal-logo">
+      <div class="modal-logo-mark">N</div>
+      <div>
+        <div class="modal-logo-text">Nxt<span>Gen</span></div>
+        <div style="font-size:11px;color:var(--text3);font-weight:500">Team communication</div>
+      </div>
+    </div>
+    <div class="modal-h1">Welcome aboard 👋</div>
+    <div class="modal-sub">Enter your name to join the NxtGen workspace and start collaborating with your team in real-time.</div>
+    <div class="modal-label">Your display name</div>
+    <input class="modal-input" id="joinNameInput" placeholder="e.g. Alex Chen" maxlength="32" autofocus>
+    <button class="modal-btn" onclick="joinWorkspace()">Join NxtGen →</button>
+  </div>
+</div>
+
+<!-- ══════════════ NEW CHANNEL MODAL ══════════════ -->
+<div class="modal-backdrop hidden" id="newChannelModal">
+  <div class="modal-card modal-sm">
+    <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px">Create a channel</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Channels are where your team communicates.</div>
+    <div class="modal-label">Channel name</div>
+    <input class="modal-input" id="newChName" placeholder="e.g. marketing" maxlength="32">
+    <div class="modal-label">Description <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
+    <input class="modal-input" id="newChDesc" placeholder="What's this channel about?">
+    <div style="display:flex;gap:8px">
+      <button class="modal-btn" style="background:#f4f2fc;color:var(--brand);box-shadow:none;border:1.5px solid #d4cbf5" onclick="closeNewChannelModal()">Cancel</button>
+      <button class="modal-btn" onclick="createChannel()">Create Channel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<aside class="sidebar">
+  <!-- Workspace header -->
+  <div class="workspace-header">
+    <div class="logo-mark">
+      <div class="logo-shimmer"></div>
+      N
+    </div>
+    <div>
+      <div class="workspace-name">NxtGen</div>
+      <div class="workspace-plan">Free workspace</div>
+    </div>
+    <div class="ws-chevron">⌄</div>
+  </div>
+
+  <!-- My presence -->
+  <div class="my-presence" id="myPresence">
+    <div class="presence-avatar" id="myAvatarSb" style="background:var(--av-indigo)">?</div>
+    <div class="presence-info">
+      <div class="presence-name" id="myNameSb">You</div>
+      <div class="presence-status">🟢 Active</div>
+    </div>
+    <div class="presence-edit">✏️</div>
+  </div>
+
+  <!-- Channels -->
+  <div class="sb-section">
+    <div class="sb-section-header">
+      Channels
+      <button class="sb-add-btn" onclick="openNewChannelModal()" title="Add channel">+</button>
+    </div>
+  </div>
+  <div class="channels-scroll" id="channelList">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- Direct Messages / Members -->
+  <div class="sb-section" style="margin-top:8px">
+    <div class="sb-section-header">Members <span id="memberCount" style="font-weight:400;opacity:.5;text-transform:none;letter-spacing:0">0</span></div>
+  </div>
+  <div class="members-scroll" id="memberList">
+    <!-- populated by JS -->
+  </div>
+</aside>
+
+<!-- ══════════════ MAIN AREA ══════════════ -->
+<main class="main">
+  <!-- Top bar -->
+  <div class="channel-topbar">
+    <div class="topbar-left">
+      <span class="topbar-emoji" id="topbarEmoji">💬</span>
+      <span class="topbar-name" id="topbarName">general</span>
+      <div class="topbar-divider"></div>
+      <span class="topbar-desc" id="topbarDesc">Select a channel to start messaging</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-pill" id="memberPill">
+        <span>👥</span>
+        <span id="channelMemberCount">0</span>
+      </div>
+      <button class="topbar-action" title="Search" onclick="toast('Search coming soon!','')">🔍</button>
+      <button class="topbar-action" title="Threads" onclick="toast('Threads coming soon!','')">💬</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages-area" id="messagesArea">
+    <div class="welcome-state" id="welcomeState">
+      <div class="welcome-emoji">💜</div>
+      <div class="welcome-h">You're in NxtGen!</div>
+      <div class="welcome-p">Select a channel from the sidebar to start chatting with your team in real-time.</div>
+    </div>
+  </div>
+
+  <!-- Sentiment Bar (Feature 5) -->
+  <div id="sentimentBar"></div>
+
+  <!-- Typing indicator -->
+  <div class="typing-bar" id="typingBar"></div>
+
+  <!-- Priority bar (Feature 2) -->
+  <div class="priority-bar" id="priorityBar"></div>
+
+  <!-- Feature toolbar (Features 2, 4, 6) -->
+  <div class="compose-features">
+    <span style="font-size:11px;color:#9ca3af;font-weight:600">Priority:</span>
+    <button class="priority-btn active" id="prio-NORMAL"    onclick="setPriority('NORMAL')">Normal</button>
+    <button class="priority-btn"        id="prio-IMPORTANT" onclick="setPriority('IMPORTANT')">&#x26A0;&#xFE0F; Important</button>
+    <button class="priority-btn"        id="prio-CRITICAL"  onclick="setPriority('CRITICAL')">&#x1F6A8; Critical</button>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <button class="feature-btn" onclick="openTimeCapsuleModal()">&#x23F3; Time Capsule</button>
+      <div class="lang-selector">
+        &#x1F30D; <select onchange="setLanguage(this.value)" title="Your display language">
+          <option value="en">English</option><option value="hi">Hindi</option>
+          <option value="es">Spanish</option><option value="fr">French</option>
+          <option value="de">German</option><option value="ar">Arabic</option>
+          <option value="zh">Chinese</option><option value="ja">Japanese</option>
+          <option value="pt">Portuguese</option><option value="ru">Russian</option>
+        </select>
+      </div>
+      <button class="feature-btn" onclick="toggleKnowledgePanel()">&#x1F4DA; Knowledge</button>
+    </div>
+  </div>
+
+  <!-- Compose -->
+  <div class="compose-area">
+    <div class="compose-box">
+      <div class="compose-toolbar">
+        <button class="fmt-btn" title="Bold" onclick="wrapFormat('**')"><b>B</b></button>
+        <button class="fmt-btn" title="Italic" onclick="wrapFormat('_')"><i>I</i></button>
+        <button class="fmt-btn" title="Code" onclick="wrapFormat('`')">{ }</button>
+        <div class="fmt-sep"></div>
+        <button class="fmt-btn" title="Emoji" onclick="insertEmoji()">😊</button>
+        <button class="fmt-btn" title="Mention" onclick="insertMention()">@</button>
+      </div>
+      <textarea
+        class="compose-input"
+        id="composeInput"
+        placeholder="Message #general"
+        rows="1"
+        maxlength="4000"
+      ></textarea>
+      <div class="compose-bottom">
+        <div class="compose-left">
+          <button class="fmt-btn" title="Attach file" onclick="toast('File sharing coming soon!','')">📎</button>
+          <button class="fmt-btn" title="GIF" onclick="toast('GIFs coming soon!','')">GIF</button>
+        </div>
+        <button class="send-btn disabled" id="sendBtn" onclick="sendMessage()">
+          Send <span style="font-size:16px">↑</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Right Panel: Knowledge Cards (Feature 1) - fixed slide-in -->
+<div class="kp-panel" id="knowledgePanel">
+  <div class="kp-header">
+    <span>📚 Knowledge Base</span>
+    <button class="kp-close" onclick="toggleKnowledgePanel()">✕</button>
+  </div>
+  <div class="kp-content" id="knowledgePanelContent">
+    <div class="kp-empty">No cards yet.<br>Ask technical questions and answer them in any channel.</div>
+  </div>
+</div>
+
+<!-- Time Capsule Modal (Feature 6) -->
+<div class="tc-overlay hidden" id="timeCapsuleModal">
+  <div class="tc-modal">
+    <div class="tc-header">
+      <span>⏳ Schedule Time Capsule Message</span>
+      <button class="tc-close" onclick="closeTimeCapsuleModal()">✕</button>
+    </div>
+    <div class="tc-body">
+      <div class="tc-field">
+        <label>Message content</label>
+        <textarea id="tcContent" rows="3" placeholder="Your future message..."></textarea>
+      </div>
+      <div class="tc-field">
+        <label>Deliver when:</label>
+        <div class="tc-trigger-row">
+          <label><input type="radio" name="tcTrigger" value="time" checked> At a specific time</label>
+          <label><input type="radio" name="tcTrigger" value="users"> When N users join</label>
+        </div>
+        <input type="datetime-local" id="tcDateTime" style="margin-top:8px;width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px">
+        <input type="number" id="tcUserCount" placeholder="e.g. 10 users" min="1" max="1000" style="margin-top:8px;width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px">
+      </div>
+    </div>
+    <div class="tc-footer">
+      <button class="tc-btn-cancel" onclick="closeTimeCapsuleModal()">Cancel</button>
+      <button class="tc-btn-schedule" onclick="scheduleTimeCapsule()">Schedule 🚀</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   NxtGen Client
+════════════════════════════════════════ */
+const WS_URL = `ws://${location.host}/ws/nxtgen`;
+
+let ws           = null;
+let myId         = null;
+let myName       = '';
+let myColour     = 'indigo';
+let currentChannel = null;
+let channels     = {};   // name → {name, description, emoji, members}
+let users        = {};   // id → {id, name, avatarColour}
+let msgStore     = {};   // channelName → [{...}]
+let unread       = {};   // channelName → count
+let typingTimers = {};   // channelName → {userId → clearTimeout handle}
+let typingUsers  = {};   // channelName → Set of {id, name}
+let typingTimer  = null; // my typing debounce
+let lastMsgSenderId = null;
+let lastMsgTs    = 0;
+
+const EMOJIS = ['😄','😂','❤️','👍','🎉','🚀','🔥','💯','😮','👀'];
+const AVATAR_MAP = {
+  rose:'#f43f5e', orange:'#f97316', amber:'#f59e0b', lime:'#84cc16',
+  emerald:'#10b981', teal:'#14b8a6', sky:'#0ea5e9', indigo:'#6366f1',
+  violet:'#8b5cf6', pink:'#ec4899'
+};
+
+/* ── utils ────────────────────────────── */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function ts(ms) {
+  const d = ms ? new Date(ms) : new Date();
+  return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+function dateSep(ms) {
+  const d = new Date(ms);
+  const t = new Date(); t.setHours(0,0,0,0);
+  const y = new Date(t); y.setDate(y.getDate()-1);
+  if (d >= t) return 'Today';
+  if (d >= y) return 'Yesterday';
+  return d.toLocaleDateString([], {weekday:'long', month:'long', day:'numeric'});
+}
+function avBg(colour) { return AVATAR_MAP[colour] || '#6366f1'; }
+function avInitials(name) { return (name||'?').split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase(); }
+
+function toast(msg, type='') {
+  const d = document.createElement('div');
+  d.className = `toast ${type}`;
+  d.textContent = msg;
+  document.getElementById('toastWrap').appendChild(d);
+  setTimeout(()=>d.remove(), 4200);
+}
+
+/* ── WebSocket ────────────────────────── */
+function connectWS() {
+  if (ws && ws.readyState <= 1) return;
+  ws = new WebSocket(WS_URL);
+
+  ws.onopen = () => {
+    console.log('WS connected');
+    if (myName) send({ type:'JOIN', senderName: myName });
+  };
+
+  ws.onmessage = e => {
+    try { handle(JSON.parse(e.data)); } catch(ex) { console.warn(ex); }
+  };
+
+  ws.onclose = () => {
+    console.log('WS closed, reconnecting…');
+    setTimeout(connectWS, 3000);
+  };
+
+  ws.onerror = err => console.error('WS error', err);
+}
+
+function send(obj) {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+}
+
+/* ── Message router: unified handle() is defined below ── */
+
+/* ── Data helpers ───────────────────── */
+function addChannel(ch) {
+  channels[ch.name] = { ...channels[ch.name], ...ch };
+  if (!msgStore[ch.name]) msgStore[ch.name] = [];
+}
+
+function addUser(u) {
+  if (!u.id) return;
+  users[u.id] = { ...users[u.id], ...u };
+}
+
+function storeMsg(channel, msg) {
+  if (!msgStore[channel]) msgStore[channel] = [];
+  msgStore[channel].push(msg);
+}
+
+/* ── Render: Sidebar ─────────────────── */
+function renderChannelList() {
+  const list = document.getElementById('channelList');
+  list.innerHTML = Object.values(channels).map(ch => {
+    const active  = ch.name === currentChannel;
+    const unreadC = unread[ch.name] || 0;
+    return `
+      <div class="ch-item${active?' active':''}" onclick="joinChannel('${esc(ch.name)}')">
+        <span class="ch-emoji">${esc(ch.emoji||'💬')}</span>
+        <span class="ch-name">${esc(ch.name)}</span>
+        ${unreadC > 0 ? `<span class="ch-badge">${unreadC}</span>` : `<span class="ch-dot"></span>`}
+      </div>`;
+  }).join('');
+
+  document.getElementById('channelCount')?.setAttribute('data-count', Object.keys(channels).length);
+}
+
+function renderMemberList() {
+  const list = document.getElementById('memberList');
+  const all  = Object.values(users).filter(u => u.id && u.name);
+  document.getElementById('memberCount').textContent = all.length;
+
+  list.innerHTML = all.map(u => {
+    const isMe = u.id === myId;
+    const col  = avBg(u.avatarColour);
+    return `
+      <div class="member-item">
+        <div class="m-avatar online" style="background:${col}">${avInitials(u.name)}</div>
+        <span class="m-name">${esc(u.name)}${isMe?' <span style="color:var(--sb-text-dim);font-size:10px">(you)</span>':''}</span>
+      </div>`;
+  }).join('');
+}
+
+/* ── Render: Messages ────────────────── */
+const GROUP_THRESHOLD = 5 * 60 * 1000; // 5 min
+
+function renderMessages() {
+  const area = document.getElementById('messagesArea');
+  const msgs = msgStore[currentChannel] || [];
+  area.innerHTML = '';
+
+  // Channel welcome banner
+  const ch = channels[currentChannel] || {};
+  const banner = document.createElement('div');
+  banner.className = 'ch-welcome-banner';
+  banner.innerHTML = `
+    <span class="ch-welcome-emoji">${esc(ch.emoji||'💬')}</span>
+    <div class="ch-welcome-h"># ${esc(ch.name||currentChannel)}</div>
+    <div class="ch-welcome-p">${esc(ch.description||'This is the beginning of the channel.')}</div>`;
+  area.appendChild(banner);
+
+  // Date separator tracking
+  let lastDate = '';
+  lastMsgSenderId = null;
+  lastMsgTs = 0;
+
+  msgs.forEach(msg => {
+    const d = dateSep(msg.timestamp);
+    if (d !== lastDate) {
+      const sep = document.createElement('div');
+      sep.className = 'date-sep';
+      sep.textContent = d;
+      area.appendChild(sep);
+      lastDate = d;
+      lastMsgSenderId = null; // reset grouping across date separators
+    }
+    appendMessageEl(msg, area);
+  });
+
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendMessage(msg) {
+  const area = document.getElementById('messagesArea');
+  appendMessageEl(msg, area);
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendSystemMsg(text) {
+  const area = document.getElementById('messagesArea');
+  const d = document.createElement('div');
+  d.className = 'msg-system';
+  d.innerHTML = `<span class="msg-system-icon">•</span><span>${esc(text)}</span>`;
+  area.appendChild(d);
+  area.scrollTop = area.scrollHeight;
+  lastMsgSenderId = null;
+}
+
+function appendMessageEl(msg, area) {
+  const now      = msg.timestamp || Date.now();
+  const isNew    = (msg.senderId === lastMsgSenderId) && (now - lastMsgTs < GROUP_THRESHOLD);
+  const isMe     = msg.senderId === myId;
+  const col      = avBg(msg.senderAvatar || 'indigo');
+  const msgId    = msg.id || ('msg-' + Date.now() + Math.random());
+
+  const group = document.createElement('div');
+  group.className = 'msg-group';
+  group.id = msgId;
+
+  // Format content
+  let content = esc(msg.content || '');
+  // bold **text**
+  content = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // italic _text_
+  content = content.replace(/_(.+?)_/g, '<em>$1</em>');
+  // code `text`
+  content = content.replace(/`(.+?)`/g, '<code>$1</code>');
+  // URLs
+  content = content.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+
+  group.innerHTML = `
+    <div class="msg-row${isNew?'':' first-in-group'}">
+      <div class="msg-avatar${isNew?' placeholder':''}" style="background:${col}">${isNew?'':avInitials(msg.senderName||'?')}</div>
+      <div class="msg-body">
+        ${isNew ? '' : `<div class="msg-meta"><span class="msg-author">${esc(msg.senderName||'Unknown')}</span><span class="msg-ts">${ts(msg.timestamp)}</span></div>`}
+        <div class="msg-text">${content}</div>
+        <div class="reactions" id="reactions-${msgId}"></div>
+      </div>
+      <div class="msg-actions">
+        ${EMOJIS.slice(0,5).map(e => `<button class="action-btn" title="${e}" onclick="quickReact('${msgId}','${e}')">${e}</button>`).join('')}
+        <button class="action-btn" title="More reactions" onclick="moreReact('${msgId}')">+</button>
+      </div>
+      ${isNew ? `<div class="msg-ts-hover">${ts(msg.timestamp)}</div>` : ''}
+    </div>`;
+
+  area.appendChild(group);
+
+  lastMsgSenderId = msg.senderId;
+  lastMsgTs = now;
+}
+
+/* ── Typing indicator ─────────────────── */
+function handleTypingIndicator(msg) {
+  const ch = msg.channel;
+  if (!typingUsers[ch]) typingUsers[ch] = new Map();
+
+  if (msg.data?.typing) {
+    typingUsers[ch].set(msg.senderId, msg.senderName);
+    // Auto-clear after 4 s
+    if (typingTimers[ch + '-' + msg.senderId]) clearTimeout(typingTimers[ch + '-' + msg.senderId]);
+    typingTimers[ch + '-' + msg.senderId] = setTimeout(() => {
+      clearTypingUser(ch, msg.senderId);
+    }, 4000);
+  } else {
+    typingUsers[ch].delete(msg.senderId);
+  }
+
+  if (ch === currentChannel) renderTyping();
+}
+
+function clearTypingUser(ch, userId) {
+  if (typingUsers[ch]) typingUsers[ch].delete(userId);
+  if (ch === currentChannel) renderTyping();
+}
+
+function renderTyping() {
+  const bar = document.getElementById('typingBar');
+  const map = typingUsers[currentChannel];
+  if (!map || map.size === 0) { bar.innerHTML = ''; return; }
+
+  const names = [...map.values()].filter(n => n !== myName);
+  if (!names.length) { bar.innerHTML = ''; return; }
+
+  const text = names.length === 1
+    ? `${names[0]} is typing…`
+    : names.length === 2
+      ? `${names[0]} and ${names[1]} are typing…`
+      : 'Several people are typing…';
+
+  bar.innerHTML = `
+    <div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    <span>${esc(text)}</span>`;
+}
+
+/* ── Reactions ──────────────────────── */
+const msgReactions = {}; // msgId → { emoji → count }
+
+function quickReact(msgId, emoji) {
+  send({ type:'REACT', channel: currentChannel, emoji, data: msgId });
+  // Optimistic local update
+  addReactionUI(msgId, emoji, myName);
+}
+
+function moreReact(msgId) {
+  const e = prompt('Enter an emoji:', '👍');
+  if (e && e.trim()) quickReact(msgId, e.trim());
+}
+
+function handleReaction(msg) {
+  // Find message in store by id — just update UI
+  addReactionUI(msg.data?.targetMessageId || '', msg.emoji, msg.senderName);
+}
+
+function addReactionUI(msgId, emoji, who) {
+  const container = document.getElementById('reactions-' + msgId);
+  if (!container) return;
+
+  if (!msgReactions[msgId]) msgReactions[msgId] = {};
+  if (!msgReactions[msgId][emoji]) msgReactions[msgId][emoji] = { count: 0, who: [] };
+  msgReactions[msgId][emoji].count++;
+  msgReactions[msgId][emoji].who.push(who);
+
+  container.innerHTML = Object.entries(msgReactions[msgId]).map(([em, d]) =>
+    `<div class="reaction-pill" title="${d.who.join(', ')}">${em}<span class="reaction-count">${d.count}</span></div>`
+  ).join('');
+}
+
+/* ── Channel actions ─────────────────── */
+function joinChannel(name) {
+  if (currentChannel === name) return;
+  currentChannel = name;
+  unread[name] = 0;
+  renderChannelList();
+  updateTopbar();
+
+  // Tell server to join if not already in
+  send({ type: 'CHANNEL_LIST', channel: name }); // triggers join on server side
+  // Server responds with SYSTEM + history
+
+  // Render stored messages immediately (may be empty until server responds)
+  renderMessages();
+  updateComposePlaceholder();
+}
+
+function updateTopbar() {
+  const ch = channels[currentChannel] || { name: currentChannel, emoji:'💬', description:'', members:0 };
+  document.getElementById('topbarEmoji').textContent = ch.emoji || '💬';
+  document.getElementById('topbarName').textContent  = ch.name  || currentChannel;
+  document.getElementById('topbarDesc').textContent  = ch.description || '';
+  document.getElementById('channelMemberCount').textContent = ch.members || 0;
+  document.getElementById('welcomeState')?.remove();
+}
+
+function updateComposePlaceholder() {
+  document.getElementById('composeInput').placeholder = `Message #${currentChannel}`;
+}
+
+function updateMyPresence() {
+  const col = avBg(myColour);
+  const sb  = document.getElementById('myAvatarSb');
+  sb.style.background = col;
+  sb.textContent = avInitials(myName);
+  document.getElementById('myNameSb').textContent = myName;
+}
+
+/* ── Compose ─────────────────────────── */
+const composeInput = document.getElementById('composeInput');
+const sendBtn      = document.getElementById('sendBtn');
+
+composeInput.addEventListener('input', () => {
+  const val = composeInput.value.trim();
+  sendBtn.classList.toggle('disabled', !val || !currentChannel);
+
+  // Auto-resize
+  composeInput.style.height = 'auto';
+  composeInput.style.height = Math.min(composeInput.scrollHeight, 200) + 'px';
+
+  // Typing indicator
+  if (currentChannel && val) {
+    send({ type:'TYPING', channel: currentChannel });
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => send({ type:'STOP_TYPING', channel: currentChannel }), 2000);
+  } else if (currentChannel) {
+    send({ type:'STOP_TYPING', channel: currentChannel });
+  }
+});
+
+composeInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+/* sendMessage() is defined below with priority support */
+
+function wrapFormat(wrap) {
+  const inp = composeInput;
+  const start = inp.selectionStart, end = inp.selectionEnd;
+  const sel = inp.value.slice(start, end);
+  const before = inp.value.slice(0, start);
+  const after  = inp.value.slice(end);
+  inp.value = before + wrap + sel + wrap + after;
+  inp.focus();
+  inp.setSelectionRange(start + wrap.length, end + wrap.length);
+  inp.dispatchEvent(new Event('input'));
+}
+
+function insertEmoji() {
+  const e = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+  const start = composeInput.selectionStart;
+  const v = composeInput.value;
+  composeInput.value = v.slice(0, start) + e + v.slice(start);
+  composeInput.focus();
+  composeInput.dispatchEvent(new Event('input'));
+}
+
+function insertMention() {
+  const names = Object.values(users).map(u=>u.name).filter(n=>n&&n!==myName);
+  if (!names.length) return;
+  const pick = names[0]; // could be a picker in a real app
+  const start = composeInput.selectionStart;
+  const v = composeInput.value;
+  composeInput.value = v.slice(0, start) + '@' + pick + ' ' + v.slice(start);
+  composeInput.focus();
+  composeInput.dispatchEvent(new Event('input'));
+}
+
+/* ── Join flow ───────────────────────── */
+document.getElementById('joinNameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') joinWorkspace();
+});
+
+function joinWorkspace() {
+  const name = document.getElementById('joinNameInput').value.trim();
+  if (!name) { document.getElementById('joinNameInput').focus(); return; }
+  myName = name;
+  document.getElementById('joinModal').classList.add('hidden');
+  connectWS();
+}
+
+/* ── New channel modal ───────────────── */
+function openNewChannelModal() {
+  document.getElementById('newChannelModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('newChName').focus(), 50);
+}
+function closeNewChannelModal() {
+  document.getElementById('newChannelModal').classList.add('hidden');
+  document.getElementById('newChName').value = '';
+  document.getElementById('newChDesc').value = '';
+}
+document.getElementById('newChName').addEventListener('keydown', e => { if (e.key === 'Enter') createChannel(); });
+
+function createChannel() {
+  const name = document.getElementById('newChName').value.trim().toLowerCase();
+  const desc = document.getElementById('newChDesc').value.trim();
+  if (!name) return;
+
+  // Via REST
+  fetch('/api/channels', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, description: desc || 'Team channel', emoji:'💬' })
+  }).then(r => r.json()).then(data => {
+    closeNewChannelModal();
+    toast(`#${data.name} created!`, 'success');
+    // Now join it
+    send({ type:'CHANNEL_LIST', channel: data.name });
+    setTimeout(() => joinChannel(data.name), 200);
+  }).catch(() => toast('Could not create channel', 'error'));
+}
+
+/* ── Presence edit (click my presence) ── */
+document.getElementById('myPresence').addEventListener('click', () => {
+  const n = prompt('Update your display name:', myName);
+  if (!n || !n.trim()) return;
+  myName = n.trim();
+  send({ type:'JOIN', senderName: myName });
+  updateMyPresence();
+  toast(`Name updated to "${myName}"`, 'success');
+});
+
+/* ════════════════════════════════════════════════
+   FEATURE 1 — Real-Time Knowledge Extraction
+════════════════════════════════════════════════ */
+const knowledgeCards = [];
+
+function handleKnowledgeCard(msg) {
+  const d = msg.data || {};
+  knowledgeCards.unshift(d);
+  if (knowledgeCards.length > 50) knowledgeCards.pop();
+
+  // Banner in chat
+  const area = document.getElementById('messagesArea');
+  if (msg.channel === currentChannel) {
+    const el = document.createElement('div');
+    el.className = 'knowledge-card';
+    el.innerHTML = `
+      <div class="kc-header">📚 Knowledge Card Extracted</div>
+      <div class="kc-problem"><strong>❓ Problem:</strong> ${esc(d.problem||'').slice(0,120)}</div>
+      <div class="kc-solution"><strong>✅ Solution:</strong> ${esc(d.solution||'').slice(0,160)}</div>
+      <div class="kc-meta">Extracted by ${esc(d.extractedBy||'system')} • #${esc(d.channel||'')}</div>`;
+    area.appendChild(el);
+    area.scrollTop = area.scrollHeight;
+  }
+
+  toast('📚 Knowledge card saved!', 'success');
+  renderKnowledgePanel();
+}
+
+function renderKnowledgePanel() {
+  const panel = document.getElementById('knowledgePanelContent');
+  if (!panel) return;
+  if (!knowledgeCards.length) {
+    panel.innerHTML = '<div class="kp-empty">No cards yet.<br>Ask technical questions and answer them in any channel.</div>';
+    return;
+  }
+  panel.innerHTML = knowledgeCards.map(c => `
+    <div class="kp-item">
+      <div class="kp-badge">#${esc(c.channel||'')}</div>
+      <div class="kp-problem">❓ ${esc((c.problem||'').slice(0,100))}</div>
+      <div class="kp-solution">✅ ${esc((c.solution||'').slice(0,120))}</div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════════════════
+   FEATURE 2 — Priority Broadcast System
+════════════════════════════════════════════════ */
+let currentPriority = 'NORMAL';
+
+function setPriority(p) {
+  currentPriority = p;
+  document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('prio-' + p)?.classList.add('active');
+  const bar = document.getElementById('priorityBar');
+  bar.className = 'priority-bar prio-' + p.toLowerCase();
+  bar.textContent = p === 'NORMAL' ? '' : (p === 'IMPORTANT' ? '⚠️ IMPORTANT message mode' : '🚨 CRITICAL broadcast mode');
+}
+
+function handlePriorityMessage(msg) {
+  // Show full-screen overlay for CRITICAL
+  if (msg.priority === 'CRITICAL') {
+    const overlay = document.createElement('div');
+    overlay.className = 'critical-overlay';
+    overlay.innerHTML = `
+      <div class="critical-box">
+        <div class="critical-icon">🚨</div>
+        <div class="critical-title">CRITICAL BROADCAST</div>
+        <div class="critical-sender">From: ${esc(msg.senderName||'System')}</div>
+        <div class="critical-content">${esc(msg.content||'')}</div>
+        <button onclick="this.closest('.critical-overlay').remove()">Dismiss</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 10000);
+  }
+  // Also append to chat if in that channel
+  if (msg.channel === currentChannel) appendMessage(msg);
+}
+
+/* ════════════════════════════════════════════════
+   FEATURE 4 — Automatic Language Translation
+════════════════════════════════════════════════ */
+let myLang = 'en';
+const LANG_NAMES = {
+  en:'English', hi:'Hindi', es:'Spanish', fr:'French',
+  de:'German', ar:'Arabic', zh:'Chinese', ja:'Japanese',
+  pt:'Portuguese', ru:'Russian'
+};
+
+function setLanguage(lang) {
+  myLang = lang;
+  document.getElementById('langLabel').textContent = LANG_NAMES[lang] || lang;
+  // Tell server
+  send({ type:'SYSTEM', content:'SET_LANG:' + lang });
+  toast(`🌍 Language set to ${LANG_NAMES[lang]||lang}`, 'success');
+}
+
+function renderTranslatedMsg(msg) {
+  // If message has originalContent, show toggle
+  if (!msg.originalContent) return esc(msg.content||'');
+  return `<span class="translated-text">${esc(msg.content||'')} <span class="translation-badge" title="Translated from ${esc(msg.originalLang||'en')}">🌍</span></span>`;
+}
+
+/* ════════════════════════════════════════════════
+   FEATURE 5 — Live Sentiment Monitor
+════════════════════════════════════════════════ */
+const sentimentData = {}; // channel → {positive, neutral, negative}
+
+function handleSentimentUpdate(msg) {
+  sentimentData[msg.channel] = msg.data || {};
+  if (msg.channel === currentChannel) renderSentimentBar();
+}
+
+function renderSentimentBar() {
+  const stats = sentimentData[currentChannel];
+  if (!stats) return;
+  const bar = document.getElementById('sentimentBar');
+  if (!bar) return;
+  const pos = stats.positive || 0, neu = stats.neutral || 0, neg = stats.negative || 0;
+  bar.innerHTML = `
+    <span class="sent-label">Channel mood:</span>
+    <span class="sent-pos">😊 ${pos}%</span>
+    <span class="sent-neu">😐 ${neu}%</span>
+    <span class="sent-neg">😡 ${neg}%</span>
+    <div class="sent-bar-track">
+      <div class="sent-seg sent-seg-pos" style="width:${pos}%"></div>
+      <div class="sent-seg sent-seg-neu" style="width:${neu}%"></div>
+      <div class="sent-seg sent-seg-neg" style="width:${neg}%"></div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════
+   FEATURE 6 — Time Capsule Messages
+════════════════════════════════════════════════ */
+function openTimeCapsuleModal() {
+  document.getElementById('timeCapsuleModal').classList.remove('hidden');
+  // Default to 1 hour from now
+  const dt = new Date(Date.now() + 3600000);
+  document.getElementById('tcDateTime').value = dt.toISOString().slice(0,16);
+}
+function closeTimeCapsuleModal() {
+  document.getElementById('timeCapsuleModal').classList.add('hidden');
+}
+
+function scheduleTimeCapsule() {
+  const content    = document.getElementById('tcContent').value.trim();
+  const dateVal    = document.getElementById('tcDateTime').value;
+  const userCount  = parseInt(document.getElementById('tcUserCount').value || '0');
+  const triggerType= document.querySelector('input[name="tcTrigger"]:checked')?.value || 'time';
+
+  if (!content) { toast('Please enter message content', 'error'); return; }
+  if (!currentChannel)  { toast('Join a channel first', 'error'); return; }
+
+  const payload = {
+    type: 'TIME_CAPSULE',
+    channel: currentChannel,
+    content
+  };
+
+  if (triggerType === 'time' && dateVal) {
+    payload.deliverAt = new Date(dateVal).getTime();
+  } else if (triggerType === 'users' && userCount > 0) {
+    payload.deliverAtUserCount = userCount;
+  } else {
+    toast('Set a valid delivery trigger', 'error');
+    return;
+  }
+
+  send(payload);
+  closeTimeCapsuleModal();
+  document.getElementById('tcContent').value = '';
+}
+
+/* ════════════════════════════════════════════════
+   FEATURE 7 — Attention Routing
+════════════════════════════════════════════════ */
+function handleAttentionRoute(msg) {
+  if (msg.channel !== currentChannel) return;
+  const d = msg.data || {};
+  const area = document.getElementById('messagesArea');
+  const el = document.createElement('div');
+  el.className = 'attention-route';
+  el.innerHTML = `
+    <span class="ar-icon">🎯</span>
+    <div class="ar-body">
+      <strong>Question detected</strong> — routing to <span class="ar-expert">${esc(d.suggestedExpert||'an expert')}</span>
+      <span class="ar-kw">matched: "${esc(d.matchedKeyword||'')}"</span>
+    </div>`;
+  area.appendChild(el);
+  area.scrollTop = area.scrollHeight;
+}
+
+/* ════════════════════════════════════════════════
+   UNIFIED handle() — replaces the original, covers all message types
+════════════════════════════════════════════════ */
+function handle(msg) {
+  switch (msg.type) {
+    // ── Original types ──────────────────────────────────────────
+    case 'WELCOME':
+      myId     = msg.data.userId;
+      myName   = msg.data.userName;
+      myColour = msg.data.avatarColour;
+      updateMyPresence();
+      (msg.data.channels || []).forEach(addChannel);
+      (msg.data.users    || []).forEach(addUser);
+      renderChannelList();
+      renderMemberList();
+      joinChannel('general');
+      if (msg.data.generalHistory?.length) {
+        msgStore['general'] = [];
+        msg.data.generalHistory.forEach(m => storeMsg('general', m));
+        if (currentChannel === 'general') renderMessages();
+      }
+      // Seed feature data
+      (msg.data.knowledgeCards || []).forEach(c => knowledgeCards.push(c));
+      renderKnowledgePanel();
+      if (msg.data.sentimentStats) {
+        Object.assign(sentimentData, msg.data.sentimentStats);
+        renderSentimentBar();
+      }
+      break;
+
+    case 'USER_JOINED':
+      addUser({ id: msg.senderId, name: msg.senderName, avatarColour: msg.senderAvatar });
+      (msg.data?.users || []).forEach(addUser);
+      renderMemberList();
+      if (currentChannel === msg.channel) appendSystemMsg(msg.senderName + ' joined the channel 👋');
+      break;
+
+    case 'USER_LEFT':
+      delete users[msg.senderId];
+      (msg.data?.users || []).forEach(addUser);
+      renderMemberList();
+      if (currentChannel === msg.channel || !msg.channel) appendSystemMsg(msg.senderName + ' left the workspace');
+      break;
+
+    case 'CHANNEL_MESSAGE':
+      storeMsg(msg.channel, msg);
+      if (msg.channel === currentChannel) {
+        appendMessage(msg);
+      } else {
+        unread[msg.channel] = (unread[msg.channel] || 0) + 1;
+        renderChannelList();
+        toast(`#${msg.channel}: ${msg.senderName}: ${msg.content.slice(0,60)}`, '');
+      }
+      clearTypingUser(msg.channel, msg.senderId);
+      break;
+
+    case 'SYSTEM':
+      if (msg.data?.channel) {
+        const chData = msg.data.channel;
+        addChannel(chData);
+        renderChannelList();
+        currentChannel = chData.name;
+        updateTopbar();
+        renderMessages();
+        if (msg.data.history?.length) {
+          msgStore[chData.name] = [];
+          msg.data.history.forEach(m => storeMsg(chData.name, m));
+          renderMessages();
+        }
+        // Seed per-channel knowledge + sentiment
+        if (msg.data.knowledgeCards?.length) {
+          msg.data.knowledgeCards.forEach(c => {
+            if (!knowledgeCards.find(k => k.id === c.id)) knowledgeCards.unshift(c);
+          });
+          renderKnowledgePanel();
+        }
+        if (msg.data.sentimentStats) {
+          sentimentData[chData.name] = msg.data.sentimentStats;
+          renderSentimentBar();
+        }
+      }
+      break;
+
+    case 'CHANNEL_LIST': {
+      const chs = msg.data?.channels || msg.data || [];
+      chs.forEach(addChannel);
+      renderChannelList();
+      break;
+    }
+
+    case 'TYPING_INDICATOR': handleTypingIndicator(msg); break;
+    case 'REACTION':         handleReaction(msg); break;
+    case 'PONG':             break;
+    case 'ERROR':            toast(msg.content, 'error'); break;
+
+    // ── New feature types ───────────────────────────────────────
+    case 'KNOWLEDGE_CARD':   handleKnowledgeCard(msg);   break;
+    case 'PRIORITY_MESSAGE': handlePriorityMessage(msg); break;
+    case 'SENTIMENT_UPDATE': handleSentimentUpdate(msg); break;
+    case 'ATTENTION_ROUTE':  handleAttentionRoute(msg);  break;
+    case 'TIME_CAPSULE':
+      toast('⏳ Time capsule delivered!', 'success');
+      msg.type = 'CHANNEL_MESSAGE';
+      handle(msg);
+      break;
+  }
+}
+
+/* ════════════════════════════════════════════════
+   OVERRIDE sendMessage() to include priority
+════════════════════════════════════════════════ */
+function sendMessage() {
+  const content = composeInput.value.trim();
+  if (!content || !currentChannel) return;
+
+  send({ type:'MESSAGE', channel: currentChannel, content, priority: currentPriority });
+
+  const fakeMsg = {
+    id: 'local-' + Date.now(), type:'CHANNEL_MESSAGE',
+    senderId: myId, senderName: myName, senderAvatar: myColour,
+    channel: currentChannel, content, timestamp: Date.now(),
+    priority: currentPriority
+  };
+  storeMsg(currentChannel, fakeMsg);
+  appendMessage(fakeMsg);
+
+  composeInput.value = '';
+  composeInput.style.height = 'auto';
+  sendBtn.classList.add('disabled');
+  send({ type:'STOP_TYPING', channel: currentChannel });
+  clearTimeout(typingTimer);
+  currentPriority = 'NORMAL';
+  setPriority('NORMAL');
+}
+
+/* ── Knowledge Panel toggle ─────────────── */
+function toggleKnowledgePanel() {
+  const panel = document.getElementById('knowledgePanel');
+  panel.classList.toggle('open');
+  renderKnowledgePanel();
+}
+
+
+</script>
+</body>
+</html>
